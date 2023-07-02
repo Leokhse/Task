@@ -29,8 +29,9 @@ public class TodosTest {
         Task[] actual = todos.findAll();
         Assertions.assertArrayEquals(expected, actual);
     }
+
     @Test
-    public void shouldReturnMatchingTasksForQuery() {
+    public void shouldReturnMatchingTasksForQueryWithMultipleMatches() {
         SimpleTask simpleTask = new SimpleTask(1, "Позвонить родителям");
         Epic epic = new Epic(2, new String[]{"Подготовить презентацию", "Собрать данные", "Написать отчет"});
         Meeting meeting = new Meeting(3, "Выкатка 3й версии приложения", "Приложение НетоБанка", "Во вторник после обеда");
@@ -43,6 +44,39 @@ public class TodosTest {
 
         Task[] expected = {epic};
         Task[] actual = todos.search("Подготовить");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldReturnMatchingTasksForQueryWithOneMatch() {
+        SimpleTask simpleTask = new SimpleTask(1, "Позвонить родителям");
+        Epic epic = new Epic(2, new String[]{"Подготовить презентацию", "Собрать данные", "Написать отчет"});
+        Meeting meeting = new Meeting(3, "Выкатка 3й версии приложения", "Приложение НетоБанка", "Во вторник после обеда");
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {meeting};
+        Task[] actual = todos.search("Приложение");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldReturnMatchingTasksForQueryWithNoMatches() {
+        SimpleTask simpleTask = new SimpleTask(1, "Позвонить родителям");
+        Epic epic = new Epic(2, new String[]{"Подготовить презентацию", "Собрать данные", "Написать отчет"});
+        Meeting meeting = new Meeting(3, "Выкатка 3й версии приложения", "Приложение НетоБанка", "Во вторник после обеда");
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+        Task[] expected = {};
+        Task[] actual = todos.search("Неточный запрос");
         Assertions.assertArrayEquals(expected, actual);
     }
 }
